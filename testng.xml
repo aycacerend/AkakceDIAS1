@@ -1,0 +1,7 @@
+<suite name="Akakçe Mobile Test Suite" parallel="tests" thread-count="2">
+    <test name="Akakçe Cucumber Tests">
+        <classes>
+            <class name="com.akakce.tests.TestRunner"/>
+        </classes>
+    </test>
+</suite>
