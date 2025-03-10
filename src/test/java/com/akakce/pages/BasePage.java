@@ -1,31 +1,47 @@
 package com.akakce.pages;
 
-import io.appium.java_client.WebElement;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
-
-
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 public class BasePage {
+    protected AndroidDriver driver;
+    protected WebDriverWait wait;
 
-    protected AndroidDriver<MobileElement> driver;
-
-    public BasePage(AndroidDriver<MobileElement> driver) {
+    public BasePage(AndroidDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // 10 saniye bekleme süresi
     }
 
-    // Sayfa üzerinde genel bir element bulma metodu
-    protected MobileElement findElement(By locator) {
-        return driver.findElement(locator);
+    // Elementi bulunana kadar bekler ve geri döner
+    protected WebElement waitForElement(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-    // Sayfa üzerinde elemente tıklama metodu
+    // Buton tıklamak için yardımcı metod
     protected void clickElement(By locator) {
-        findElement(locator).click();
+        WebElement element = waitForElement(locator);
+        element.click();
     }
 
-    // Sayfa üzerinde metin girme metodu
-    protected void sendKeys(By locator, String text) {
-        findElement(locator).sendKeys(text);
+    // Text kutularını veya metinleri doğrulamak için metod
+    protected String getElementText(By locator) {
+        WebElement element = waitForElement(locator);
+        return element.getText();
+    }
+
+    // Elementi görünür olana kadar bekleyip bir metin girmek için yardımcı metod
+    protected void sendKeysToElement(By locator, String text) {
+        WebElement element = waitForElement(locator);
+        element.sendKeys(text);
+    }
+
+    // Elementin varlığını doğrulamak için yardımcı metod
+    protected boolean isElementDisplayed(By locator) {
+        WebElement element = waitForElement(locator);
+        return element.isDisplayed();
     }
 }
